@@ -100,7 +100,11 @@ def apply_resize():
                 output_file = write_folder / f.relative_to(read_folder)
                 if not output_file.parent.exists():
                     output_file.parent.mkdir(parents=True)
-                image = Image.open(f)
+                try:
+                    image = Image.open(f)
+                except Exception as e:
+                    add_text(text, f"Error opening {f}: {e}\n")
+                    continue
                 w, h = image.size
                 image = image.resize((w // DOWNSCALE_RATIO, h // DOWNSCALE_RATIO))
                 image.save(output_file)
